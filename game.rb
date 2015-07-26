@@ -9,6 +9,7 @@ class Game
     @cards.deck_shuffle
     @my_chips = 2000
     @pc_chips = 2000
+    @pc_cards = 0
     @pot = 0
     @ante = 50
     @bet = 50
@@ -167,16 +168,17 @@ class Game
   end
 
   def check_kye
-    print "\nb:Bet(50) r:Raise(150) f:Fold\n"
+    print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
     @check = gets.chomp
     if @my_chips < 50
       @check = 'f'
     end
-    while !((@check == 'b') || (@check == 'f') || (@check == 'r'))
-      print "\nb:Bet(50) r:Raise(150) f:Fold\n"
+    while !((@check == 'b') || (@check == 'f') || (@check == 'r') || (@check == 'c'))
+      print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
       @check = gets.chomp
     end
-    if @check == 'b'
+    if @check == 'c'
+    elsif @check == 'b'
       @pot += @bet * 2
       @my_chips -= @bet
       @pc_chips -= @bet
