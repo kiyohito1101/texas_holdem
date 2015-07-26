@@ -7,11 +7,12 @@ class Game
   def initialize
     @cards = CardDeck.new
     @cards.deck_shuffle
-    @my_chips = 1000
-    @pc_chips = 1000
+    @my_chips = 2000
+    @pc_chips = 2000
     @pot = 0
     @ante = 50
     @bet = 50
+    @raise = 150
     @my_hand = 0
     @pc_hand = 0
     @check = String.new
@@ -42,16 +43,13 @@ class Game
     @my_deck.deck.each do |x|
       print @my_deck.deck_show(x)," "
     end
-    print "\n-------------------------------------","\nb:Bet(50) f:Fold\n"
+    print "\n-------------------------------------"
   end
 
   def flop
     3.times do
       @open_deck.deck << @cards.deck.shift
     end
-    @pot += @bet * 2
-    @my_chips -= @bet
-    @pc_chips -= @bet
     print "---------------Flop---------------\n",
           "                         pc_chips [",
           @pc_chips,"]\n\n"
@@ -64,14 +62,11 @@ class Game
     @my_deck.deck.each do |x|
       print @my_deck.deck_show(x)," "
     end
-    print "\n-------------------------------------","\nb:Bet(50) f:Fold\n"
+    print "\n-------------------------------------"
   end
 
   def tern
     @open_deck.deck << @cards.deck.shift
-    @pot += @bet * 2
-    @my_chips -= @bet
-    @pc_chips -= @bet
     print "---------------Tern---------------\n",
           "                         pc_chips [",
           @pc_chips,"]\n\n"
@@ -84,14 +79,11 @@ class Game
     @my_deck.deck.each do |x|
       print @my_deck.deck_show(x)," "
     end
-    print "\n-------------------------------------","\nb:Bet(50) f:Fold\n"
+    print "\n-------------------------------------"
   end
 
   def river
     @open_deck.deck << @cards.deck.shift
-    @pot += @bet * 2
-    @my_chips -= @bet
-    @pc_chips -= @bet
     print "---------------River---------------\n",
           "                         pc_chips [",
           @pc_chips,"]\n\n"
@@ -104,13 +96,10 @@ class Game
     @my_deck.deck.each do |x|
       print @my_deck.deck_show(x)," "
     end
-    print "\n-------------------------------------","\nb:Bet(50) f:Fold\n"
+    print "\n-------------------------------------"
   end
 
   def showdown
-    @pot += @bet * 2
-    @my_chips -= @bet
-    @pc_chips -= @bet
     print "---------------Showdown---------------\n","               "
 
     @pc_deck.deck.each do |x|
@@ -132,13 +121,23 @@ class Game
   end
 
   def table_reset
-    if @my_hand > @pc_hand
-      print "my_win ", @my_deck.hand_check(@my_hand), "\n"
-      print "pc_lose ", @pc_deck.hand_check(@pc_hand), "\n"
-      @my_chips += @pot
-    elsif @my_hand == @pc_hand
-      if @my_deck.hand_high == @pc_deck.hand_high
-        if @my_deck.high_card > @pc_deck.high_card
+    if @my_hand != 0
+      if @my_hand > @pc_hand
+        print "my_win ", @my_deck.hand_check(@my_hand), "\n"
+        print "pc_lose ", @pc_deck.hand_check(@pc_hand), "\n"
+        @my_chips += @pot
+      elsif @my_hand == @pc_hand
+        if @my_deck.hand_high == @pc_deck.hand_high
+          if @my_deck.high_card > @pc_deck.high_card
+            print "my_win ", @my_deck.hand_check(@my_hand), "\n"
+            print "pc_lose ", @pc_deck.hand_check(@pc_hand), "\n"
+            @my_chips += @pot
+          else
+            print "pc_win ", @pc_deck.hand_check(@pc_hand), "\n"
+            print "my_lose ", @my_deck.hand_check(@my_hand), "\n"
+            @pc_chips += @pot
+          end
+        elsif @my_deck.hand_high > @pc_deck.hand_high
           print "my_win ", @my_deck.hand_check(@my_hand), "\n"
           print "pc_lose ", @pc_deck.hand_check(@pc_hand), "\n"
           @my_chips += @pot
@@ -147,19 +146,11 @@ class Game
           print "my_lose ", @my_deck.hand_check(@my_hand), "\n"
           @pc_chips += @pot
         end
-      elsif @my_deck.hand_high > @pc_deck.hand_high
-        print "my_win ", @my_deck.hand_check(@my_hand), "\n"
-        print "pc_lose ", @pc_deck.hand_check(@pc_hand), "\n"
-        @my_chips += @pot
       else
         print "pc_win ", @pc_deck.hand_check(@pc_hand), "\n"
         print "my_lose ", @my_deck.hand_check(@my_hand), "\n"
         @pc_chips += @pot
       end
-    else
-      print "pc_win ", @pc_deck.hand_check(@pc_hand), "\n"
-      print "my_lose ", @my_deck.hand_check(@my_hand), "\n"
-      @pc_chips += @pot
     end
 
     @my_hand = 0
@@ -176,13 +167,23 @@ class Game
   end
 
   def check_kye
+    print "\nb:Bet(50) r:Raise(150) f:Fold\n"
     @check = gets.chomp
     if @my_chips < 50
       @check = 'f'
     end
-    while !((@check == 'b') || (@check == 'f'))
-      print "\nb:Bet(50) f:Fold\n"
+    while !((@check == 'b') || (@check == 'f') || (@check == 'r'))
+      print "\nb:Bet(50) r:Raise(150) f:Fold\n"
       @check = gets.chomp
+    end
+    if @check == 'b'
+      @pot += @bet * 2
+      @my_chips -= @bet
+      @pc_chips -= @bet
+    elsif @check == 'r'
+      @pot += @raise * 2
+      @my_chips -= @raise
+      @pc_chips -= @raise
     end
   end
 
