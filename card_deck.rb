@@ -1,5 +1,5 @@
-class CardDeck
-  attr_accessor :deck, :high_card, :hand_high
+class CardDeck < Array
+  attr_accessor :deck, :high_card, :hand_high, :action
 
   def initialize
     @suit = ["S","H","D","C"]
@@ -7,6 +7,7 @@ class CardDeck
     @deck = Array.new
     @check_suit = Array.new
     @check_num = Array.new
+    @action = 0
     @high_card = 0
     @hand_high = 0
   end
@@ -134,8 +135,8 @@ class CardDeck
     end
 
     #カード分布表示・デバグ用
-    p @check_num
-    p work_num
+#    p @check_num
+#    p work_num
 #    p @check_suit
 #    p work_suit
 
@@ -182,6 +183,12 @@ class CardDeck
     end
 
     return hand
+  end
+
+  def pc_hand_check
+    if (@deck[0] % 13) == (@deck[1] % 13)
+      @action = 1
+    end
   end
 
   def hand_check(hand)
