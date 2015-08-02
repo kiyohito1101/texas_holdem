@@ -1,12 +1,11 @@
 class CardDeck < Array
-  attr_accessor :deck, :high_card, :hand_high, :action
+  attr_accessor :deck, :high_card, :hand_high, :action, :pry
 
   def initialize
     @suit = ["S","H","D","C"]
     @num = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
     @deck = Array.new
-    @check_suit = Array.new
-    @check_num = Array.new
+    @pry = 0
     @action = 0
     @high_card = 0
     @hand_high = 0
@@ -47,16 +46,18 @@ class CardDeck < Array
   def hand(open_deck)
     work_num = Array.new(14, 0)
     work_suit = Array.new(4, 0)
+    check_suit = Array.new
+    check_num = Array.new
     hand = 0
     suit_high_card = 0
-    @deck += open_deck
-    @deck.each do |card|
-      @check_suit << card / 13
-      @check_num << card % 13
+    work_deck = @deck + open_deck
+    work_deck.each do |card|
+      check_suit << card / 13
+      check_num << card % 13
     end
 
     #ストレート判定用の分布配列
-    @check_num.each do |i|
+    check_num.each do |i|
       if i == 0
         work_num[0] = work_num[0] + 1
         work_num[13] = work_num[13] + 1
@@ -66,7 +67,7 @@ class CardDeck < Array
     end
 
     #フラッシュ判定の分布配列
-    @check_suit.each do |i|
+    check_suit.each do |i|
       work_suit[i] = work_suit[i] + 1
     end
     
@@ -99,7 +100,7 @@ class CardDeck < Array
     #ストレートフラッシュ判定
     if hand == 9
       x = 0
-      @deck.each do |card|
+      work_deck.each do |card|
         if (suit_high_card == (card / 13)) && (work_num[(card % 13)] != 0)
           x += 1
         end
@@ -135,19 +136,19 @@ class CardDeck < Array
     end
 
     #カード分布表示・デバグ用
-#    p @check_num
+#    p check_num
 #    p work_num
-#    p @check_suit
+#    p check_suit
 #    p work_suit
 
     #ロイヤルストレートフラッシュの判定
-    if @deck.include?([0,9,10,11,12]) || @deck.include?([13,22,23,24,25]) || @deck.include?([26,35,36,37,38]) || @deck.include?([39,48,49,50,51])
+    if work_deck.include?([0,9,10,11,12]) || work_deck.include?([13,22,23,24,25]) || work_deck.include?([26,35,36,37,38]) || work_deck.include?([39,48,49,50,51])
       hand = 10
     end
 
     #フラッシュのハイカード判定
     if hand == 6
-      @deck.each do |card|
+      work_deck.each do |card|
         if suit_high_card == (card / 13)
           if @hand_high < (card % 13)
             @hand_high = card % 13
@@ -168,7 +169,7 @@ class CardDeck < Array
           x = 0
         end
         if (x >= 5)
-          @deck.each do |i|
+          work_deck.each do |i|
             if i == work_num[y]
               @hand_high = work_num[y]
             end
@@ -189,6 +190,88 @@ class CardDeck < Array
     if (@deck[0] % 13) == (@deck[1] % 13)
       @action = 1
     end
+    @pry = 1
+  end
+
+  def pc_hand_check_all(open_deck)
+    work_num = Array.new(14, 0)
+    work_suit = Array.new(4, 0)
+    check_suit = Array.new
+    check_num = Array.new
+    hand = 0
+    work_deck = @deck + open_deck
+    work_deck.each do |card|
+      check_suit << card / 13
+      check_num << card % 13
+    end
+
+    #ストレート判定用の分布配列
+    check_num.each do |i|
+      if i == 0
+        work_num[0] = work_num[0] + 1
+        work_num[13] = work_num[13] + 1
+      else
+        work_num[i] = work_num[i] + 1
+      end
+    end
+
+    #フラッシュ判定の分布配列
+    check_suit.each do |i|
+      work_suit[i] = work_suit[i] + 1
+    end
+    
+    #ストレートの判定
+    x = 0
+    work_num.each do |i|
+      if i > 0
+        x += 1
+      elsif i == 0
+        x = 0
+      end
+      if (x >= 5) &&
+        hand = 5
+      end
+    end
+
+    #フラッシュ判定
+    x = 0
+    work_suit.each do |i|
+      if (i == 5) && (hand == 5)
+        hand = 9
+      elsif (i == 5)
+        hand = 6
+      end
+      x += 1
+    end
+
+    #ストレート判定用の要素１３はペア判定にいらないので削除
+    work_num.delete_at(13)
+
+    #ペア・複数枚の役の判定
+    x = 0
+    work_num.each do |i|
+      if (i == 4)
+        hand = 8
+      elsif ((i == 3) && (hand == 2)) || ((i == 2) && (hand == 4)) || ((i == 3) && (hand == 4))
+        hand = 7
+      elsif (i == 3) && (hand < 4)
+        hand = 4
+      elsif (i == 2) && (hand == 2)
+        hand = 3
+      elsif (i == 2) && (hand < 2)
+        hand = 2
+      end
+      x += 1
+    end
+
+    @action = hand
+
+    #カード分布表示・デバグ用
+#    p check_num
+#    p work_num
+#    p check_suit
+#    p work_suit
+
   end
 
   def hand_check(hand)

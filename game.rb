@@ -168,7 +168,7 @@ class Game
   end
 
   def check_kye
-    if (@open_deck.empty?) && (@pc_deck.action == 0)
+    if (@open_deck.deck.empty?) && (@pc_deck.action == 0)
       @pc_deck.pc_hand_check
       step = 1
       while (step == 1)
@@ -221,6 +221,7 @@ class Game
         end
       end
     else
+      @pc_deck.pc_hand_check_all(@open_deck.deck)
       print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
       @check = gets.chomp
       if @my_chips < 50
@@ -242,6 +243,10 @@ class Game
       @my_chips -= @raise
       @pc_chips -= @raise
     end
+  end
+
+  def my_win
+    @my_chips += @pot
   end
 
   def table_show
