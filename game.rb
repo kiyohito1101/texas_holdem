@@ -222,7 +222,7 @@ class Game
       end
     else
       @pc_deck.pc_hand_check_all(@open_deck.deck)
-      if (@pc_deck.action > (Random.rand(10)))
+      if ((@pc_deck.action + 2) > (Random.rand(10)))
         step = 1
         while (step == 1)
           print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"

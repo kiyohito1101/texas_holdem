@@ -178,6 +178,14 @@ class CardDeck < Array
       end
     end
 
+    if ((hand == 8) || (hand == 7) || (hand == 4) || (hand == 3) || (hand == 2))
+      if (@hand_high == 0)
+        @hand_high = 13
+      end
+    end
+
+    puts @hand_high
+
     #何も当てはまらなかったらハイカード
     if hand == 0
       hand += 1
@@ -185,7 +193,7 @@ class CardDeck < Array
 
     return hand
   end
-
+  #ポケットハンド判定
   def pc_hand_check
     if (@deck[0] % 13) == (@deck[1] % 13)
       @action = 1
@@ -193,6 +201,7 @@ class CardDeck < Array
     @pry = 1
   end
 
+  #相手のターン毎の役の判定
   def pc_hand_check_all(open_deck)
     work_num = Array.new(14, 0)
     work_suit = Array.new(4, 0)
