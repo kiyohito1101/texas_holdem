@@ -222,14 +222,67 @@ class Game
       end
     else
       @pc_deck.pc_hand_check_all(@open_deck.deck)
-      print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
-      @check = gets.chomp
-      if @my_chips < 50
-        @check = 'f'
-      end
-      while !((@check == 'b') || (@check == 'f') || (@check == 'r') || (@check == 'c'))
+      if (@pc_deck.action > (Random.rand(10)))
+        step = 1
+        while (step == 1)
+          print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
+          @check = gets.chomp
+          if @my_chips < 50
+            @check = 'f'
+          end
+          while !((@check == 'b') || (@check == 'f') || (@check == 'r') || (@check == 'c'))
+            print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
+            @check = gets.chomp
+            if (@my_chips < 150 && (@check == 'r'))
+              @check = ""
+            end
+          end
+          if ((@check == 'c') || (@check == 'b')) && @pc_chips > 600
+            if @my_chips < 150
+              @check = 'f'
+            end
+            if (@check == 'b')
+              @pot += @bet
+              @my_chips -= @bet
+            end
+            @pot += @raise
+            @pc_chips -= @raise
+            while !((@check == 'a') || (@check == 'f') || (@check == 'r'))
+              print "\npc Raise!\na:Call(100) r:Raise(450) f:Fold\n"
+              @check = gets.chomp
+              if (@my_chips < 450 && (@check == 'r'))
+                @check = ""
+              end
+            end
+            if @check == 'a'
+              @pot += (@bet * 2)
+              @my_chips -= (@bet * 2)
+              @check = 'c'
+              step = 0
+            elsif @check == 'r'
+              @pot += (@raise * 5)
+              @my_chips -= (@raise * 3)
+              @pc_chips -= (@raise * 2)
+              @check = 'c'
+              step = 0
+              print "pc Call!\n"
+            elsif @check == 'f'
+              step = 0
+            end
+          else
+            step = 0
+          end
+        end
+      else
         print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
         @check = gets.chomp
+        if @my_chips < 50
+          @check = 'f'
+        end
+        while !((@check == 'b') || (@check == 'f') || (@check == 'r') || (@check == 'c'))
+          print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
+          @check = gets.chomp
+        end
       end
     end
 
