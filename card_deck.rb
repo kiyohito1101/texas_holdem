@@ -1,4 +1,4 @@
-class CardDeck < Array
+class CardDeck
   attr_accessor :deck, :high_card, :hand_high, :action, :pry
 
   def initialize
@@ -179,8 +179,6 @@ class CardDeck < Array
         @hand_high = 13
       end
     end
-
-    puts @hand_high
 
     #何も当てはまらなかったらハイカード
     if hand == 0
