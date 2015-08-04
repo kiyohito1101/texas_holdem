@@ -51,7 +51,7 @@ class Game
     3.times do
       @open_deck.deck << @cards.deck.shift
     end
-    print "---------------Flop---------------\n",
+    print "-----------------Flop----------------\n",
           "                         pc_chips [",
           @pc_chips,"]\n\n"
 
@@ -68,7 +68,7 @@ class Game
 
   def tern
     @open_deck.deck << @cards.deck.shift
-    print "---------------Tern---------------\n",
+    print "-----------------Tern----------------\n",
           "                         pc_chips [",
           @pc_chips,"]\n\n"
 
@@ -85,7 +85,7 @@ class Game
 
   def river
     @open_deck.deck << @cards.deck.shift
-    print "---------------River---------------\n",
+    print "----------------River----------------\n",
           "                         pc_chips [",
           @pc_chips,"]\n\n"
 
@@ -101,7 +101,7 @@ class Game
   end
 
   def showdown
-    print "---------------Showdown---------------\n","               "
+    print "--------------Showdown---------------\n","               "
 
     @pc_deck.deck.each do |x|
       print @pc_deck.deck_show(x)," "

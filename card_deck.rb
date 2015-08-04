@@ -76,7 +76,7 @@ class CardDeck < Array
     work_num.each do |i|
       if i > 0
         x += 1
-      elsif i == 0
+      else
         x = 0
       end
       if (x >= 5)
@@ -162,19 +162,15 @@ class CardDeck < Array
       x = 0
       y = 0
       work_num.each do |i|
-        y += 1
         if i > 0
           x += 1
-        elsif i == 0
+        else
           x = 0
         end
         if (x >= 5)
-          work_deck.each do |i|
-            if i == work_num[y]
-              @hand_high = work_num[y]
-            end
-          end
+          @hand_high = y
         end
+        y += 1
       end
     end
 
@@ -237,7 +233,7 @@ class CardDeck < Array
       elsif i == 0
         x = 0
       end
-      if (x >= 5) &&
+      if (x >= 5)
         hand = 5
       end
     end
