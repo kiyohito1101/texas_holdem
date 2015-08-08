@@ -301,10 +301,3 @@ class Game
   def my_win
     @my_chips += @pot
   end
-
-  def table_show
-    @my_deck.deck.each do |x|
-      puts @my_deck.deck_show(x)
-    end
-  end
-end

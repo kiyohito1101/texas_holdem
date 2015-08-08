@@ -42,7 +42,7 @@ class CardDeck
     card1 > card2 ? @high_card = card1 : @high_card = card2
   end
 
-    #役の判定
+  #役の判定
   def hand(open_deck)
     work_num = Array.new(14, 0)
     work_suit = Array.new(4, 0)

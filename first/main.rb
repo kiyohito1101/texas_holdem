@@ -1,6 +1,7 @@
 require './game'
 
 a = Game.new
+
 while ((a.my_chips > 50) && (a.pc_chips > 50))
   a.pre_flop
   a.check_kye
