@@ -70,7 +70,7 @@ class CardDeck
     check_suit.each do |i|
       work_suit[i] = work_suit[i] + 1
     end
-    
+
     #ストレートの判定
     x = 0
     work_num.each do |i|
@@ -222,7 +222,7 @@ class CardDeck
     check_suit.each do |i|
       work_suit[i] = work_suit[i] + 1
     end
-    
+
     #ストレートの判定
     x = 0
     work_num.each do |i|
