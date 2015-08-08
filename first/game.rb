@@ -301,3 +301,4 @@ class Game
   def my_win
     @my_chips += @pot
   end
+end
