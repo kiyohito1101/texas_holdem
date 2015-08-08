@@ -70,8 +70,8 @@ class Dealer
 
     print "\nc:Check b:Bet(50) r:Raise(150) f:Fold\n"
     @my_player.input_key(50)
-    my_pot = @my_player.pot_in
-    
+    @my_player.pot_in(my_pot,pc_pot)
+    @pc_player.pc_input_key(150)
   end
 
   def table_reset
