@@ -300,5 +300,15 @@ class Game
 
   def my_win
     @my_chips += @pot
+    self.clear
+  end
+  def my_fold
+    printf "Fold\n"
+    self.clear
+  end
+
+  def clear
+    @check = gets.chomp
+    print "\e[2J\e[f"
   end
 end
